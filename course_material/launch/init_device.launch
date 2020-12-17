@@ -1,0 +1,28 @@
+<launch>
+
+<include file="$(find gretchen_head_controller)/launch/controller.launch" >
+</include>
+
+<node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
+    <param name="video_device" value="/dev/video0" />
+    <param name="image_width" value="640" />
+    <param name="image_height" value="480" />
+    <param name="pixel_format" value="yuyv" />
+    <param name="camera_frame_id" value="camera_color_optical_frame" />
+    <param name="io_method" value="mmap"/>
+    <remap from="usb_cam/image_raw" to="/camera/color/image_raw"/>
+</node>
+
+<node name="image_view" pkg="image_view" type="image_view" respawn="false" output="screen">
+    <remap from="image" to="/camera/color/image_raw"/>
+    <param name="autosize" value="true" />
+</node>
+
+<!-- <node name="show_marker" pkg="look_at_point" type="generate_marker" respawn="false" output="screen">
+</node> -->
+
+
+<include file="$(find head_action)/launch/head_action.launch" >
+</include>
+
+</launch>

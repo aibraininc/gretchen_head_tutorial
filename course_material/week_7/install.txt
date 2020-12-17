@@ -1,0 +1,21 @@
+sudo apt-get install python-pip
+sudo pip install virtualenv
+source myenv/bin/activate
+
+# if you don't have myenv folder on week_7 folder
+virtualenv -p python3 myenv
+
+wget https://pjreddie.com/media/files/yolov3.weights
+wget https://pjreddie.com/media/files/yolov3-tiny.weights
+
+virtualenv python myenv 
+source myenv/bin/activate
+pip install opencv-python
+pip install opencv-contrib-python
+pip install netifaces
+
+
+roslaunch look_at_point start_look_at_point.launch 
+
+
+
