@@ -1,0 +1,3 @@
+[submodule "objects_msg"]
+	path = objects_msg
+	url = https://github.com/aibraininc/objects_msg.git

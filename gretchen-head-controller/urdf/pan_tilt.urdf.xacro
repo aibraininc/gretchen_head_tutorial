@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" 
+    xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+  xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+  xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+    name="gretchen">
+
+
+
+    <xacro:property name="deg_to_rad" value="0.01745329251994329577" />
+    <xacro:property name="base_link_length" value="0.01" />
+    <xacro:property name="base_link_radius" value="0.1" />
+
+    <xacro:property name="pan_link_length" value="0.15" />
+    <xacro:property name="pan_link_radius" value="0.01" />
+
+    <xacro:property name="tilt_link_length" value="0.05" />
+    <xacro:property name="tilt_link_radius" value="0.01" />
+
+
+    <xacro:macro name="inertial_matrix" params="mass">
+               <inertial>
+                       <mass value="${mass}" />
+                       <inertia ixx="1." ixy="0.0" ixz="0.0"
+                                iyy="1." iyz="0.0"
+                                izz="1." />
+               </inertial>
+    </xacro:macro>
+
+
+
+  <link name="base_link">
+
+    <visual>
+      <geometry>
+         <cylinder length="${base_link_length}" radius="${base_link_radius}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="yellow">
+        <color rgba="1 1 0 1"/>
+      </material>
+    </visual>
+
+    <collision>
+      <geometry>
+         <cylinder length="${base_link_length+0.02}" radius="0.2"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+    <xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <joint name="pan_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="pan_link"/>
+    <origin xyz="0 0 0"/>
+    <axis xyz="0 0 1" />
+    <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+  <link name="pan_link">
+    <visual>
+      <geometry>
+         <cylinder length="${pan_link_length}" radius="${pan_link_radius}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="blue">
+        <color rgba="0 0 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+         <cylinder length="${pan_link_length}" radius="${pan_link_radius+0.02}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+    <xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <joint name="tilt_joint" type="revolute">
+    <parent link="pan_link"/>
+    <child link="tilt_link"/>
+    <origin xyz="0 0 ${pan_link_length/2}" rpy="${90.0 * deg_to_rad} 0 0"/>
+    <axis xyz="0 0 1" />
+    <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+  <link name="tilt_link">
+    <visual>
+      <geometry>
+         <cylinder length="${tilt_link_length}" radius="${tilt_link_radius}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="red">
+        <color rgba="1 0 0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+         <cylinder length="${tilt_link_length}" radius="${tilt_link_radius+0.2}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+    <xacro:inertial_matrix mass="1"/>
+  </link>
+
+   <xacro:macro name="transmission_block" params="joint_name">
+    <transmission name="tran1">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${joint_name}">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="motor1">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+   </xacro:macro>
+
+
+  <gazebo reference="base_link">
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+  <gazebo reference="pan_link">
+    <material>Gazebo/Blue</material>
+  </gazebo>
+
+  <gazebo reference="tilt_link">
+    <material>Gazebo/Red</material>
+  </gazebo>
+
+   <xacro:transmission_block joint_name="pan_joint"/>
+   <xacro:transmission_block joint_name="tilt_joint"/>
+
+ <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    <robotNamespace>/gretchen</robotNamespace>
+    </plugin>
+  </gazebo>
+
+
+  <xacro:include filename="$(find gretchen_head_controller)/urdf/_d435.urdf.xacro" />
+
+  <xacro:sensor_d435 parent="tilt_link">
+    <origin xyz="${(tilt_link_radius+0)/ 2} 0. 0" rpy="${-90 * deg_to_rad} 0 0" />
+  </xacro:sensor_d435>
+</robot>
+

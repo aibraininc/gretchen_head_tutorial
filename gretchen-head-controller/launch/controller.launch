@@ -1,0 +1,34 @@
+<launch>
+
+  <!-- start low level motor driver-->
+  <node name="motor_driver" pkg="dynamixel_ros" type="dynamixel_driver_test.py" respawn="false" output="screen"
+    ns="/gretchen">
+    <remap from="joint/poses" to="/gretchen/joint/poses" />
+    <remap from="joint/cmd" to="/gretchen/joint/cmd" />
+  </node>
+
+  <!-- start hw_interface -->
+  <node name="head" pkg="gretchen_head_controller" type="head_hw_interface" respawn="false"
+    output="screen" ns="/gretchen">
+  </node>
+
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <rosparam file="$(find gretchen_head_controller)/config/head_controller.yaml" command="load"/>
+
+  <!-- load the ros controllers -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" ns="/gretchen" args="joint_state_controller head_controller"/>
+
+  <!-- Load the URDF into the ROS Parameter Server -->
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find gretchen_head_controller)/urdf/pan_tilt.urdf.xacro' use_nominal_extrinsics:=true" />
+
+  <!-- convert joint states to TF transforms for rviz, etc -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+    respawn="false" output="screen">
+    <remap from="/joint_states" to="/gretchen/joint_states" />
+  </node>
+
+  <!-- show riviz -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find gretchen_head_controller)/view.rviz" required="True" />
+
+</launch>
