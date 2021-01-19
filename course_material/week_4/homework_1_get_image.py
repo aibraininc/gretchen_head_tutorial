@@ -15,7 +15,7 @@ def main():
 
     # Loop
     while True:
-        #TODO: get image from camera, getImage returns an image
+        #TODO: get an image from the camera, getImage returns an image
         img = 
         # Use opencv to show image on window named "Frame"
         cv2.imshow("Frame", img[...,::-1])
