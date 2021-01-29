@@ -108,9 +108,9 @@ def main():
             #Start tracking
             if Tracking:
                 print("Tracking the Person")
-                #TODO: converts the 2d point on the image  to a 3d point on camera coordinates system
+                #TODO: convert the 2d point on the image to a 3d point on the camera coordinates system
                 (x,y,z) = 
-                #TODO: converts 3d point on camera coordinates system to 3d point on robot coordinates system
+                #TODO: convert the 3d point on the camera coordinates system to a 3d point on the robot coordinates system
                 (x,y,z) = 
                 #TODO: move robot to track your face
                 

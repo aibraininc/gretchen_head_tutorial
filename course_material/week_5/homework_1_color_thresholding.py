@@ -10,7 +10,7 @@ camera = Camera()
 # Intalize point
 point = (0,0)
 
-#TODO: set lower and upper limit for filtering the color you want
+#TODO: set the lower and upper limit for filtering the selected color 
 
 # Lower bound for the selected color 
 colorLower = (, , )

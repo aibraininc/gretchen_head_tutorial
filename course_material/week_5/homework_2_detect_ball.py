@@ -27,9 +27,9 @@ def main():
 
     # Loop
     while True:
-        #TODO: get image from camera
+        #TODO: get an image from the camera
         img = 
-        #TODO: use ball_detector to detect ball
+        #TODO: use ball_detector to detect the ball
         (img, center) = 
         cv2.imshow("Frame", img[...,::-1])
         # Close if key is pressed

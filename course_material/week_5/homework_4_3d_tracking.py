@@ -36,15 +36,15 @@ def main():
             break
         # Track ball
         if(center!= None):
-            #TODO convert 2d coordinates to 3d coordinates on camera coordinate system
+            #TODO convert 2d coordinates to 3d coordinates on the camera coordinate system
             (x,y,z) =
             print (x,y,z,'on camera axis')
 
-            #TODO convert 3d coordinates on camera axis to 3d coordinates on robot axis
+            #TODO convert 3d coordinates on the camera axis to 3d coordinates on the robot axis
             (x,y,z) =
             print (x,y,z,'on robot axis')
 
-            #TODO: move robot to look at 3d point
+            #TODO: move robot to look at a 3d point
             robot.lookatpoint()
 
 if __name__ == '__main__':

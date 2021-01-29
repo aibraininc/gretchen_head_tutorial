@@ -52,11 +52,11 @@ def main():
     tts.save('answer.mp3')
     playsound.playsound('answer.mp3')
 
-    #TODO: check if 'yes' in voice input
+    #TODO: check if 'yes' is in voice input
     if in answer.lower():
         #TODO: robot should nod
 
-    #TODO: check if 'no' in voice input
+    #TODO: check if 'no' is in voice input
     elif  in answer.lower():
         #TODO: robot should shake
 

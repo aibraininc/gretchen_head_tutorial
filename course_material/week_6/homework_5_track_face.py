@@ -44,10 +44,10 @@ def main():
             tracked_face = dets[0]
             tracked_face_x = (tracked_face.left()+tracked_face.right())/2
             tracked_face_y = (tracked_face.top()+tracked_face.bottom())/2
-            #TODO: convert 2d point to 3d point on the camera coordinates system 
+            #TODO: convert the 2d point on the image to a 3d point on the camera coordinates system 
 
 
-            #TODO: convert the 3d point on the camera point system to the robot coordinates system
+            #TODO: convert the 3d point on the camera point system to a 3d point on the robot coordinates system
 
 
             #TODO: move the robot so that it tracks the face

@@ -15,7 +15,7 @@ def main():
     #Initalize AICoRe client
     client = AICoRE()
 
-    #TODO: Set up client name
+    #TODO: Set the username
     client.setUserName('username')
 
     #Initalize speeech recogniton
@@ -25,7 +25,7 @@ def main():
     for i, item in enumerate(sr.Microphone.list_microphone_names()):
         print( i, item)
 
-    #TODO: Initalize mic and set the device_index
+    #TODO: Initalize the mic and set the device_index
     mic = sr.Microphone(device_index=1)
 
     print "I'm listening"
@@ -38,9 +38,9 @@ def main():
     #TODO: convert audio to text
     text =
 
-    #TODO: send text to client
+    #TODO: send text to AICoRE
     
-    #TODO: get answer from AICoRe
+    #TODO: get answer from AICoRE
     answer = 
 
     #TODO: Convert text to speech

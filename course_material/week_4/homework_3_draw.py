@@ -25,7 +25,7 @@ def main():
         j_min = 
         j_max = 
 
-        # Draw rectangle on the image
+        # Draw a rectangle on the image
         for i in range(i_min,i_max):
             for j in range(j_min,j_max):
                 #TODO: change the pixel to another color                
