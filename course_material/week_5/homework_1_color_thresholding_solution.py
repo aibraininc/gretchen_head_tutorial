@@ -18,7 +18,7 @@ colorUpper = (50, 240, 200)
 
 
 def color_segmentation(frame):
-    # convert it to the HSV
+    # convert it to HSV
     hsv = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
 
     # Use inRange to get the mask/color segmentation for the selected color

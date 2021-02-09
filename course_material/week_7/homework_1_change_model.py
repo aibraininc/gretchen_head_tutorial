@@ -13,7 +13,7 @@ from lib.camera_v2 import Camera
 from lib.ros_environment import ROSEnvironment
 from lib.robot import Robot
 
-#TODO: set the path of setting files
+#TODO: set the path for the configuration, weight, and class names
 cfg_path = "./CONFIGURATION_FILE.cfg"
 weight_path= "./WEIGHT_FILE.weights"
 class_name_path = "./yolov3.txt"
@@ -23,7 +23,7 @@ classes = None
 with open(class_name_path, 'r') as file:
     classes = [line.strip() for line in file.readlines()]
 
-#Creates different color for different colors
+#Creates different color for bounding boxes
 COLORS = np.random.uniform(0, 255, size=(len(classes), 3))
 
 #draws bounding box on the image

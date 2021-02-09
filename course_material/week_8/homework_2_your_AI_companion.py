@@ -27,9 +27,7 @@ def main():
 
     #TODO: Initalize mic and set the device_index
     mic = sr.Microphone(device_index=1)
-
     print "I'm listening"
-
     with mic as source:
         r.adjust_for_ambient_noise(source)
         audio = r.listen(source)
@@ -39,11 +37,11 @@ def main():
     answer = client.answer()
 
     #TODO:set the keyword to respond to
-    keyword = 
+    keyword =
     #check if keyword in input
     if keyword.lower() in text.lower():
         #TODO: set a response
-        answer = 
+        answer =
 
     tts = gTTS(answer)
     tts.save('hello.mp3')

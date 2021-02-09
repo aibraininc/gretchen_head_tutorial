@@ -46,6 +46,7 @@ def main():
             #TODO: find the yaw value from the rotation_vector
             print rotation_vector
             yaw =
+            print(yaw)
 
             #TODO: insert the condition for looking right
             if :

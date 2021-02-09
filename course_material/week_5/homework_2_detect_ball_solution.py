@@ -27,7 +27,7 @@ def main():
 
     # Loop
     while True:
-        #TODO: get image from camera
+        #TODO: get an image from the camera
         img = camera.getImage()
         #TODO: use ball_detector to detect ball
         (img, center) = ball_detector.detect(img)
@@ -36,6 +36,6 @@ def main():
         key = cv2.waitKey(1)
         if key > 0:
             break
-            
+
 if __name__ == '__main__':
     main()

@@ -24,7 +24,6 @@ def main():
     # Loop
     while True:
         # Get image
-        # Second parameter is upsample_num_times.
         img = camera.getImage()
 
         #TODO: get face detections using dlib detector

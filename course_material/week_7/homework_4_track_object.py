@@ -13,7 +13,7 @@ from lib.camera_v2 import Camera
 from lib.ros_environment import ROSEnvironment
 from lib.robot import Robot
 
-#TODO: set the path of setting files
+#TODO: set the path for the configuration, weight, and class names
 cfg_path = "./yolov3-tiny.cfg"
 weight_path= "./yolov3-tiny.weights"
 class_name_path = "./yolov3.txt"
@@ -128,10 +128,11 @@ def main():
             #If detected object equals to the object tracked
             #TODO: make if statement  for selecting the object you want to track
             if
-                #TODO: Converts the 3d camera coordinates into 3d world coordinates
-                () = camera.convert2d_3d()
+                #TODO: convert the 2d point to a 3d point on the camera coordinates system
+                () = camera.convert2d_3d(
+                #TODO: convert the 3d point on the camera coordinates system to a 3d point on the robot coordinates system
                 (x_3d,y_3d,z_3d) = camera.convert3d_3d()
-                #TODO: commands the robot to look
+                #TODO: command the robot to look at the point
                 robot.lookatpoint()
 
                 tracked_object = 1

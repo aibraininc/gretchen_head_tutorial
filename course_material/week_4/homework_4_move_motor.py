@@ -7,13 +7,13 @@ import time
 
 def startNod(robot):
     robot.center()
-    time.sleep(1)
+    time.sleep(1) #waits a bit
 
     #TODO: insert code to make the robot nod.
 
 def startShake(robot):
     robot.center()
-    time.sleep(1)
+    time.sleep(1) #waits a bit
 
     #TODO: insert code to make the robot shake.
 
@@ -25,9 +25,9 @@ def main():
     robot = Robot()
     # Start robot
     robot.start()
-    # Uncomment/comment  
+    # Uncomment/comment
     startNod(robot)
-    # Uncomment/comment 
+    # Uncomment/comment
     # startShake(robot)
 
 

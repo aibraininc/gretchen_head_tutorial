@@ -13,13 +13,13 @@ def main():
     # Start robot
     robot.start()
 
-    
+
     time.sleep(1) # wait a second
 
     #TODO: remember the current position
-    curr_pos = 
-    curr_pan = 
-    curr_tilt = 
+    curr_pos =
+    curr_pan =
+    curr_tilt =
 
     #TODO: look somewhere else other than the current position
     robot.move(,)

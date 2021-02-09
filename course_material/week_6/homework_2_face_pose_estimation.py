@@ -31,7 +31,7 @@ def main():
         # Get face detections
         dets = face_detector.detect(img)
 
-        # Draw all face detections
+        # Draw rectangles over all face detections
         for det in dets:
             cv2.rectangle(img,(det.left(), det.top()), (det.right(), det.bottom()), color_green, 3)
 

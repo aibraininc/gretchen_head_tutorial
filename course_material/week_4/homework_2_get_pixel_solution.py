@@ -17,7 +17,7 @@ def onMouse(event, u, v, flags, param):
         img = camera.getImage()
         point = (u,v)
         print('Point', u,v)
-        #TODO: access the image u,v to print
+        #TODO: access the pixel located at u,v on the image to print
         print('RGB', img[v,u])
 
 def main():
@@ -30,7 +30,7 @@ def main():
     while True:
         # Get image from camera
         img = camera.getImage()
-        # Draw circle on the point coordinate
+        # Draw circle on the point 
         cv2.circle(img, point, 10, (0, 0, 255), 3)
         # Show image
         cv2.imshow("Frame", img[...,::-1])

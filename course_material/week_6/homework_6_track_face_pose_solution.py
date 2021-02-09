@@ -76,7 +76,7 @@ def main():
         img = camera.getImage()
         if frame_skip(img):
             continue
-        #gets detect face
+        #detect face
         dets = face_detector.detect(img)
 
         #If the number of face detected is greater than 0
