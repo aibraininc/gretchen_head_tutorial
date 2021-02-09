@@ -170,7 +170,8 @@ class motor_controller:
         dxl_getdata_result = groupBulkRead.isAvailable(DXL1_ID, ADDR_PRO_PRESENT_POSITION, LEN_PRO_PRESENT_POSITION)
         if dxl_getdata_result != True:
             print("[ID:%03d] groupBulkRead getdata failed" % DXL1_ID)
-            quit()
+            return 0
+            #quit()
 
         # Get present position value for dxl1
         if dxl_getdata_result == True:
@@ -180,7 +181,8 @@ class motor_controller:
         dxl_getdata_result = groupBulkRead.isAvailable(DXL2_ID, ADDR_PRO_PRESENT_POSITION, LEN_PRO_PRESENT_POSITION)
         if dxl_getdata_result != True:
             print("[ID:%03d] groupBulkRead getdata failed" % DXL2_ID)
-            quit()
+            return 0
+            #quit()
 
         # Get present position value for dxl2
         if dxl_getdata_result == True:

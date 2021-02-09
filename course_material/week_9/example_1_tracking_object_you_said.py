@@ -70,7 +70,7 @@ def listen():
         r = sr.Recognizer()
 
 
-        mic = sr.Microphone(device_index=3)
+        mic = sr.Microphone(device_index=11)
         print("I am ready to listen.")
         speak("I am ready to listen.")
 
