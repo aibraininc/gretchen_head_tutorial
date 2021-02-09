@@ -32,28 +32,28 @@ def main():
         # Get face detections
         dets = face_detector.detect(img)
 
-        # Draw all face detections
+        # Draw rectangles over all face detections
         for det in dets:
             cv2.rectangle(img,(det.left(), det.top()), (det.right(), det.bottom()), color_green, 3)
 
         # We only use 1 face to estimate pose
         if(len(dets)>0):
-            # Estimate pose
+            # Estimate headpose
             (success, rotation_vector, translation_vector, image_points) = face_detector.estimate_pose(img, dets[0])
             # Draw pose
             img = face_detector.draw_pose(img, rotation_vector, translation_vector, image_points)
 
             #TODO: find the yaw value from the rotation_vector
             print rotation_vector
-            yaw = 
+            yaw =
 
             #TODO: insert the condition for looking right
             if :
-                print ('You are looking at right.')            
+                print ('You are looking at right.')
 
             #TODO: insert the condition for looking left
             elif :
-                print ('You are looking at left.')            
+                print ('You are looking at left.')
 
         # Show image
         cv2.imshow("Frame", img[...,::-1])

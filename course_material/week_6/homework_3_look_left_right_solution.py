@@ -35,7 +35,7 @@ def main():
         # Get face detections
         dets = face_detector.detect(img)
 
-        # Draw all face detections
+        # Draw rectangles over all face detections
         for det in dets:
             cv2.rectangle(img,(det.left(), det.top()), (det.right(), det.bottom()), color_green, 3)
 
@@ -54,7 +54,7 @@ def main():
             #TODO: insert the condition for looking right
             if yaw > right_threshold:
                 print ('You are looking at right.')
-            #TODO: insert the condition for looking left                
+            #TODO: insert the condition for looking left
             elif yaw < left_threshold:
                 print ('You are looking at left.')
 

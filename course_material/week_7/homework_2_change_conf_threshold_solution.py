@@ -23,7 +23,7 @@ classes = None
 with open(class_name_path, 'r') as file:
     classes = [line.strip() for line in file.readlines()]
 
-# Create different color for different colors
+# Create different color for bounding boxes
 COLORS = np.random.uniform(0, 255, size=(len(classes), 3))
 
 # Draw bounding box on the image
@@ -102,7 +102,7 @@ def main():
                 confidence_values.append(float(confidence))
                 bounding_boxes.append([x, y, w, h])
 
-    # check your threshold for non maximal suppression 
+    # check your threshold for non maximal suppression
     indices = cv2.dnn.NMSBoxes(bounding_boxes, confidence_values, conf_threshold, nms_threshold)
 
     #draw results

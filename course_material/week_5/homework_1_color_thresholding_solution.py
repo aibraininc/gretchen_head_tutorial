@@ -10,11 +10,10 @@ camera = Camera()
 # Intalize point
 point = (0,0)
 
-#TODO: set lower and upper limit for filtering the color you want
-
-# Lower limit for color you want
+#TODO: set the lower and upper limit for filtering the selected color
+# Lower bound for the selected color
 colorLower = (20, 180, 100)
-# Upper limit for color you want
+# Upper bound for the selected color
 colorUpper = (50, 240, 200)
 
 
@@ -22,7 +21,7 @@ def color_segmentation(frame):
     # convert it to the HSV
     hsv = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
 
-    # Use inRange for getting specific color
+    # Use inRange to get the mask/color segmentation for the selected color
     mask = cv2.inRange(hsv, colorLower, colorUpper)
 
     #Show color segmentation

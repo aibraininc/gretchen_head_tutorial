@@ -58,7 +58,7 @@ def draw_boundingbox(img, class_id, confidence, x, y, x_end, y_end):
     cv2.putText(img, class_name, (int(x-10),int(y-10)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
 
 
-def senetenceParsing(sentence = "look at a bottle"):
+def sentenceParsing(sentence = "look at a bottle"):
     sentence = sentence.lower()
     for word in classes:
         if word in sentence:
@@ -80,7 +80,7 @@ def listen():
         try:
             text = r.recognize_google(audio)
             print(text)
-            object_to_track = senetenceParsing(text)
+            object_to_track = sentenceParsing(text)
             print(object_to_track)
         except:
             pass

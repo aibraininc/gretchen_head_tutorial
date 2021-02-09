@@ -89,7 +89,7 @@ def main():
             scores = detection[5:]
             class_id = np.argmax(scores)
             confidence = scores[class_id]
-            #Check if confidence is greather than threshold
+            #Check if confidence is greater than threshold
             if confidence > conf_threshold:
                 #Compute x,y, widht, height, class id, confidence value
                 center_x = int(detection[0] * width)
@@ -102,7 +102,7 @@ def main():
                 confidence_values.append(float(confidence))
                 bounding_boxes.append([x, y, w, h])
 
-    # check your threshold for non maximal suppression 
+    # check your threshold for non maximal suppression
     indices = cv2.dnn.NMSBoxes(bounding_boxes, confidence_values, conf_threshold, nms_threshold)
 
     #draw results

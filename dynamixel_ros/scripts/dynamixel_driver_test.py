@@ -135,8 +135,8 @@ class motor_controller:
         self.prevCmd = [0, 0]
         self.pos_pan = 512
         self.pos_tilt = 512
-        
-        rospy.Timer(rospy.Duration(0.1), self.readMotor)
+
+        rospy.Timer(rospy.Duration(0.05), self.readMotor)
 
     def __del__(self):
         # body of destructor
@@ -161,7 +161,7 @@ class motor_controller:
         portHandler.closePort()
 
     def readMotor(self, event):
-        #print "publishing"
+        print "publishing"
         self.dxl_comm_result = groupBulkRead.txRxPacket()
         if self.dxl_comm_result != COMM_SUCCESS:
             print("%s" % packetHandler.getTxRxResult(self.dxl_comm_result))
@@ -171,22 +171,77 @@ class motor_controller:
         if dxl_getdata_result != True:
             print("[ID:%03d] groupBulkRead getdata failed" % DXL1_ID)
             quit()
+
+        # Get present position value for dxl1
+        if dxl_getdata_result == True:
+            dxl1_present_position = groupBulkRead.getData(DXL1_ID, ADDR_PRO_PRESENT_POSITION, LEN_PRO_PRESENT_POSITION)
+
         # Check if groupbulkread data of Dynamixel#2 is available
         dxl_getdata_result = groupBulkRead.isAvailable(DXL2_ID, ADDR_PRO_PRESENT_POSITION, LEN_PRO_PRESENT_POSITION)
         if dxl_getdata_result != True:
             print("[ID:%03d] groupBulkRead getdata failed" % DXL2_ID)
             quit()
-        # Get present position value
-        dxl1_present_position = groupBulkRead.getData(DXL1_ID, ADDR_PRO_PRESENT_POSITION, LEN_PRO_PRESENT_POSITION)
-        dxl2_present_position = groupBulkRead.getData(DXL2_ID, ADDR_PRO_PRESENT_POSITION, LEN_PRO_PRESENT_POSITION)
+
+        # Get present position value for dxl2
+        if dxl_getdata_result == True:
+            dxl2_present_position = groupBulkRead.getData(DXL2_ID, ADDR_PRO_PRESENT_POSITION, LEN_PRO_PRESENT_POSITION)
+        print("[ID:%03d] Present Position : %d \t [ID:%03d] Present Position: %d" % (DXL1_ID, dxl1_present_position, DXL2_ID, dxl2_present_position))
+        #print(type(dxl1_present_position))
+        if(dxl1_present_position<820):
+            self.pos_pan = dxl1_present_position
+        if(dxl2_present_position<820):
+            self.pos_tilt = dxl2_present_position
+        #print(self.pos_pan)
+        #print(self.pos_tilt)
+        #print("[ID:%03d] Present Position : %d \t [ID:%03d] Present Position: %d" % (DXL1_ID, self.pos_pan, DXL2_ID, self.pos_tilt))
+        curPos = Float32MultiArray()
+        #for i in range(self.motorTotal):
+        #    curPos.data.append(arraystate.position[i])
+        pos_pan_rad = float(self.pos_pan-512)/float(512-205)*3.14/2
+        pos_tilt_rad = float(self.pos_tilt-512)/float(512-205)*3.14/2
+        curPos.data = [pos_pan_rad, pos_tilt_rad]
+        #print(pos_pan_rad)
+        #print(curPos.data)
+        self.jointStatePub.publish(curPos)
+        print "Exited Writer"
+
+    def readMotor2(self):
+        #print "publishing"
+        self.dxl_comm_result = groupBulkRead.txRxPacket()
+        if self.dxl_comm_result != COMM_SUCCESS:
+            print("%s" % packetHandler.getTxRxResult(self.dxl_comm_result))
+
+        # Check if groupbulkread data of Dynamixel#1 is available
+        dxl_getdata_result = groupBulkRead.isAvailable(DXL1_ID, ADDR_PRO_PRESENT_POSITION, LEN_PRO_PRESENT_POSITION)
+        if dxl_getdata_result != True:
+            print("[ID:%03d] groupBulkRead getdata failed" % DXL1_ID)
+            return 0
+            #quit()
+
+        # Get present position value for dxl1
+        if dxl_getdata_result == True:
+            dxl1_present_position = groupBulkRead.getData(DXL1_ID, ADDR_PRO_PRESENT_POSITION, LEN_PRO_PRESENT_POSITION)
+
+        # Check if groupbulkread data of Dynamixel#2 is available
+        dxl_getdata_result = groupBulkRead.isAvailable(DXL2_ID, ADDR_PRO_PRESENT_POSITION, LEN_PRO_PRESENT_POSITION)
+        if dxl_getdata_result != True:
+            print("[ID:%03d] groupBulkRead getdata failed" % DXL2_ID)
+            return 0
+            #quit()
+
+        # Get present position value for dxl2
+        if dxl_getdata_result == True:
+            dxl2_present_position = groupBulkRead.getData(DXL2_ID, ADDR_PRO_PRESENT_POSITION, LEN_PRO_PRESENT_POSITION)
         #print("[ID:%03d] Present Position : %d \t [ID:%03d] Present Position: %d" % (DXL1_ID, dxl1_present_position, DXL2_ID, dxl2_present_position))
         #print(type(dxl1_present_position))
         if(dxl1_present_position<820):
             self.pos_pan = dxl1_present_position
-            #print(dxl1_present_position)
+        else:
+            print(dxl1_present_position)
         if(dxl2_present_position<820):
             self.pos_tilt = dxl2_present_position
-            #print(dxl2_present_position)
+        else:
+            print(dxl2_present_position)
         #print(self.pos_pan)
         #print(self.pos_tilt)
         #print("[ID:%03d] Present Position : %d \t [ID:%03d] Present Position: %d" % (DXL1_ID, self.pos_pan, DXL2_ID, self.pos_tilt))
@@ -201,11 +256,10 @@ class motor_controller:
         self.jointStatePub.publish(curPos)
 
 
-
     def writeMotor(self, arraycmd):
         #if(self.prevCmd[0]== arraycmd.data[0] and self.prevCmd[1] == arraycmd.data[1]):
         #    return
-        print "heard something"
+        print "Heard CMD, Writing to Motor"
         groupBulkWrite.clearParam()
 
         param_goal_position_pan = (arraycmd.data[0])
@@ -221,7 +275,9 @@ class motor_controller:
         diff_tilt = self.pos_tilt - param_goal_position_tilt
         print("here")
         print(abs(diff_pan))
-        print("[ID:%03d] Goal Position : %d \t Present Position: %d \t [ID:%03d] Goal Position: %d \t Present Position: %d" % (DXL1_ID, param_goal_position_pan, self.pos_pan, DXL2_ID, param_goal_position_tilt, self.pos_tilt))
+        #print("[ID:%03d] Goal Position : %d \t Present Position: %d \t [ID:%03d] Goal Position: %d \t Present Position: %d" % (DXL1_ID, param_goal_position_pan, self.pos_pan, DXL2_ID, param_goal_position_tilt, self.pos_tilt))
+        print("\t\t\t[ID:%03d] [ID:%03d] \nGoal Position :\t\t %d \t %d \nPresent Position:\t %d \t %d \n" % (DXL1_ID, DXL2_ID, param_goal_position_pan, param_goal_position_tilt, self.pos_pan, self.pos_tilt))
+
         # Allocate goal position value into byte array
         param_goal_position = [DXL_LOBYTE(DXL_LOWORD(param_goal_position_pan)), DXL_HIBYTE(DXL_LOWORD(param_goal_position_pan)), DXL_LOBYTE(DXL_HIWORD(param_goal_position_pan)), DXL_HIBYTE(DXL_HIWORD(param_goal_position_pan))]
 
@@ -250,16 +306,13 @@ class motor_controller:
         # Clear bulkwrite parameter storage
         groupBulkWrite.clearParam()
 
-
-
-
         self.prevCmd = []
         for i in range(self.motorTotal):
             self.prevCmd.append(arraycmd.data[i])
 def main():
     rospy.init_node('dynamixel_driver', anonymous=True)
-    motor_controller()
     try:
+        motor_controller()
         while not rospy.is_shutdown():
             rospy.spin()
     except rospy.ROSInterruptException:

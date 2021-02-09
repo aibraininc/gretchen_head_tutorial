@@ -37,16 +37,20 @@ def main():
 
         # Get face detections
         dets = detector(img, 1)
+
+        #Draw rectangles over the detected faces
         for det in dets:
             cv2.rectangle(img,(det.left(), det.top()), (det.right(), det.bottom()), color_green, 3)
 
+        #Use the first detected face
         if (len(dets)>0):
             tracked_face = dets[0]
+            #Get the center coordinates of the detected face
             tracked_face_x = (tracked_face.left()+tracked_face.right())/2
             tracked_face_y = (tracked_face.top()+tracked_face.bottom())/2
-            #TODO: convert 2d point to 3d point on the camera coordinates system 
+            #TODO: convert the 2d point to a 3d point on the camera coordinates system
             (x,y,z) = camera.convert2d_3d(tracked_face_x, tracked_face_y)
-            #TODO: convert the 3d point on the camera point system to the robot coordinates system
+            #TODO: convert the 3d point on the camera coordinates system to a 3d point on the robot coordinates system
             (x,y,z) = camera.convert3d_3d(x,y,z)
             #TODO: move the robot so that it tracks the face
             robot.lookatpoint(x,y,z)

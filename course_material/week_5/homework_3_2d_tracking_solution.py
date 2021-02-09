@@ -49,17 +49,17 @@ def main():
         # Track ball
 
         if(ball_center!= None):
-            #TODO: calculate distance between detected ball and the image center.
+            #TODO: calculate the distance between detected ball and the image center.
             distance = calculateDistance(ball_center)
             print distance[0], distance[1]
 
-            #TODO: move motor on x-axis using right and left function
+            #TODO: move the motor on the x-axis using the right and left function
             if distance[0]> ball_on_left:
                 robot.right(0.01)
             elif distance[0] < ball_on_right:
                 robot.left(0.01)
 
-            #TODO: move motor on y-axis using up and down function
+            #TODO: move the motor on the y-axis using the up and down function
             if distance[1]> ball_on_top:
                 robot.down(0.01)
             elif distance[1] < ball_on_bottom:

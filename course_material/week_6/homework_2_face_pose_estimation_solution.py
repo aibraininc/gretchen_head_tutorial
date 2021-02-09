@@ -32,15 +32,15 @@ def main():
         # Get face detections
         dets = face_detector.detect(img)
 
-        # Draw all face detections
+        # Draw rectangles over all face detections
         for det in dets:
             cv2.rectangle(img,(det.left(), det.top()), (det.right(), det.bottom()), color_green, 3)
 
-        # We only use 1 face to estimate pose
+        # We only use 1 detected face to estimate pose
         if(len(dets)>0):
-            #TODO: estimate pose of a detected face
+            #TODO: estimate the head pose of the detected face
             (success, rotation_vector, translation_vector, image_points) = face_detector.estimate_pose(img, dets[0])
-            # Draw pose
+            # Draw head pose
             img = face_detector.draw_pose(img, rotation_vector, translation_vector, image_points)
             print("rotation_vector")
             print rotation_vector

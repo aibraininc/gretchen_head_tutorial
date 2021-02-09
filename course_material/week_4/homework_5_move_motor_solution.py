@@ -13,7 +13,7 @@ def main():
     # Start robot
     robot.start()
 
-    
+
     time.sleep(1) # wait a second
 
     #TODO: remember the current position
@@ -25,7 +25,7 @@ def main():
     robot.move(-1.3,-0.3)
     time.sleep(1) # wait a second
 
-    #TODO: return back to looking at the current position stored
+    #TODO: returns back to looking at the stored current position 
     robot.move(curr_pan, curr_tilt)
     time.sleep(1) # wait a second
 
