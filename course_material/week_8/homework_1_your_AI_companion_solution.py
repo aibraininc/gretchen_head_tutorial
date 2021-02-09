@@ -27,6 +27,7 @@ def main():
 
     #TODO: Initalize mic and set the device_index
     mic = sr.Microphone(device_index=11)
+    print "I'm listening"
     with mic as source:
         #TODO: adjust for noise
         r.adjust_for_ambient_noise(source)
