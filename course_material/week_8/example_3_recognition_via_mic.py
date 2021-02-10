@@ -13,6 +13,7 @@ def main():
     #TODO need to change the device_index to select the microphone you want to use
     mic = sr.Microphone(device_index=11)
     #Listen to microphone input
+    print("I'm listening.");
     with mic as source:
         audio = r.listen(source)
     try:
