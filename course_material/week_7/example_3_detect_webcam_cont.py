@@ -13,8 +13,8 @@ from lib.ros_environment import ROSEnvironment
 
 
 #Path to files needed
-cfg_path = "./yolov3.cfg"
-weight_path= "./yolov3.weights"
+cfg_path = "./yolov3-tiny.cfg"
+weight_path= "./yolov3-tiny.weights"
 class_name_path = "./yolov3.txt"
 
 #Loads class names into an array
