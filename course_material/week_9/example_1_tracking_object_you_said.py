@@ -21,6 +21,9 @@ from gtts import gTTS
 import pygame
 import playsound
 
+#disable ssl-warnings
+import urllib3
+urllib3.disable_warnings()
 
 #Path to files needed
 cfg_path = "./yolov3-tiny.cfg"
