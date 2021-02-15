@@ -2,6 +2,10 @@
 import sys
 import speech_recognition as sr
 import playsound
+#disable ssl-warnings
+import urllib3
+urllib3.disable_warnings()
+
 from gtts import gTTS
 sys.path.append('..')
 from lib.ros_environment import ROSEnvironment
@@ -19,7 +23,7 @@ def main():
     r = sr.Recognizer()
     #Initalize mic
     #TODO set the microphone index
-    mic = sr.Microphone(device_index=11)
+    mic = sr.Microphone(device_index=2)
     print("start talking")
     with mic as source:
         #adjust for noise
