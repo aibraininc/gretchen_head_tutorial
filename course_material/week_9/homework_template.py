@@ -29,6 +29,13 @@ from lib.camera_v2 import Camera
 from lib.robot import Robot
 from gtts import gTTS
 
+#disable ssl-warnings
+import urllib3
+urllib3.disable_warnings()
+
+#check for time
+import time
+
 #List all the microphone hardware
 for i, item in enumerate(sr.Microphone.list_microphone_names()):
     print( i, item)
@@ -42,12 +49,17 @@ def speak(text):
     playsound.playsound('text.mp3')   
 
 def listen():
+    speak_time = 0
     while True:
+	if time.time()-speak_time < 5:
+            continue
+
         r = sr.Recognizer()
-        mic = sr.Microphone(device_index=7)
+        mic = sr.Microphone(device_index=11)
         print("I am ready to listen.")
         # run speech to text
         speak("I am ready to listen.")
+        speak_time = time.time()
 
         with mic as source:
             r.adjust_for_ambient_noise(source)

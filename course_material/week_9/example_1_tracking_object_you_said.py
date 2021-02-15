@@ -25,6 +25,9 @@ import playsound
 import urllib3
 urllib3.disable_warnings()
 
+#check for time
+import time
+
 #Path to files needed
 cfg_path = "./yolov3-tiny.cfg"
 weight_path= "./yolov3-tiny.weights"
@@ -69,13 +72,16 @@ def sentenceParsing(sentence = "look at a bottle"):
 
 def listen():
     global object_to_track
+    speak_time = 0
     while True:
+        if time.time()-speak_time < 5:
+            continue
+
         r = sr.Recognizer()
-
-
         mic = sr.Microphone(device_index=11)
         print("I am ready to listen.")
         speak("I am ready to listen.")
+	speak_time = time.time()
 
         with mic as source:
             r.adjust_for_ambient_noise(source)
