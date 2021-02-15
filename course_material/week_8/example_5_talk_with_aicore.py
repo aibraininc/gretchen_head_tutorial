@@ -23,7 +23,7 @@ def main():
     r = sr.Recognizer()
     #Initalize mic
     #TODO set the microphone index
-    mic = sr.Microphone(device_index=2)
+    mic = sr.Microphone(device_index=11)
     print("start talking")
     with mic as source:
         #adjust for noise
