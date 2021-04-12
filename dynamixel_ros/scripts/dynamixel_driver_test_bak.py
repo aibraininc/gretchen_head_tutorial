@@ -266,14 +266,7 @@ class motor_controller:
 
         param_goal_position_pan = (arraycmd.data[0])
         param_goal_position_tilt = (arraycmd.data[1])
-        if(param_goal_position_pan>1.3):
-            param_goal_position_pan=1.3
-        if(param_goal_position_pan<-1.3):
-            param_goal_position_pan=-1.3
-        if(param_goal_position_tilt>1.3):
-            param_goal_position_tilt=1.3
-        if(param_goal_position_tilt<-0.8):
-            param_goal_position_tilt=-0.8
+
         param_goal_position_pan = param_goal_position_pan*2/3.14*float(512-205)+512
         param_goal_position_tilt = param_goal_position_tilt*2/3.14*float(512-205)+512
         #print(param_goal_position_pan)
