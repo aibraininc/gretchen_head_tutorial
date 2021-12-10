@@ -135,8 +135,7 @@ add_dependencies( ${catkin_EXPORTED_TARGETS})
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 #add_executable(${PROJECT_NAME}_node src/dynamixel_ros_node.cpp)
-add_executable(test_node src/test.cpp)
-add_executable(d2d_node src/d2d.cpp)
+
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -151,12 +150,7 @@ add_executable(d2d_node src/d2d.cpp)
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
- target_link_libraries(test_node
-   ${catkin_LIBRARIES}
- )
- target_link_libraries(d2d_node
-   ${catkin_LIBRARIES}
- )
+
 #############
 ## Install ##
 #############
