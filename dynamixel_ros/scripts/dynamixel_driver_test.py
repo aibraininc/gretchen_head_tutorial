@@ -136,6 +136,10 @@ class motor_controller:
         self.pos_pan = 512
         self.pos_tilt = 512
 
+        self.dxl1_prev_position = 0
+        self.dxl2_prev_position = 0
+        self.dxl1_present_position = 0
+        self.dxl2_present_position = 0
         rospy.Timer(rospy.Duration(0.05), self.readMotor)
 
     def __del__(self):
@@ -162,6 +166,10 @@ class motor_controller:
 
     def readMotor(self, event):
         print "publishing"
+
+        self.dxl1_prev_position = self.dxl1_present_position
+        self.dxl2_prev_position = self.dxl2_present_position
+
         self.dxl_comm_result = groupBulkRead.txRxPacket()
         if self.dxl_comm_result != COMM_SUCCESS:
             print("%s" % packetHandler.getTxRxResult(self.dxl_comm_result))
@@ -175,7 +183,7 @@ class motor_controller:
 
         # Get present position value for dxl1
         if dxl_getdata_result == True:
-            dxl1_present_position = groupBulkRead.getData(DXL1_ID, ADDR_PRO_PRESENT_POSITION, LEN_PRO_PRESENT_POSITION)
+            self.dxl1_present_position = groupBulkRead.getData(DXL1_ID, ADDR_PRO_PRESENT_POSITION, LEN_PRO_PRESENT_POSITION)
 
         # Check if groupbulkread data of Dynamixel#2 is available
         dxl_getdata_result = groupBulkRead.isAvailable(DXL2_ID, ADDR_PRO_PRESENT_POSITION, LEN_PRO_PRESENT_POSITION)
@@ -186,13 +194,17 @@ class motor_controller:
 
         # Get present position value for dxl2
         if dxl_getdata_result == True:
-            dxl2_present_position = groupBulkRead.getData(DXL2_ID, ADDR_PRO_PRESENT_POSITION, LEN_PRO_PRESENT_POSITION)
-        print("[ID:%03d] Present Position : %d \t [ID:%03d] Present Position: %d" % (DXL1_ID, dxl1_present_position, DXL2_ID, dxl2_present_position))
+            self.dxl2_present_position = groupBulkRead.getData(DXL2_ID, ADDR_PRO_PRESENT_POSITION, LEN_PRO_PRESENT_POSITION)
+        print("[ID:%03d] Present Position : %d \t [ID:%03d] Present Position: %d" % (DXL1_ID, self.dxl1_present_position, DXL2_ID, self.dxl2_present_position))
         #print(type(dxl1_present_position))
-        if(dxl1_present_position<820):
-            self.pos_pan = dxl1_present_position
-        if(dxl2_present_position<820):
-            self.pos_tilt = dxl2_present_position
+        if(self.dxl1_present_position<820):
+            self.pos_pan = self.dxl1_present_position
+        else:
+            self.dxl1_present_position= self.dxl1_prev_position
+        if(self.dxl2_present_position<820):
+            self.pos_tilt = self.dxl2_present_position
+        else:
+            self.dxl2_present_position = self.dxl2_prev_position
         #print(self.pos_pan)
         #print(self.pos_tilt)
         #print("[ID:%03d] Present Position : %d \t [ID:%03d] Present Position: %d" % (DXL1_ID, self.pos_pan, DXL2_ID, self.pos_tilt))
@@ -222,7 +234,7 @@ class motor_controller:
 
         # Get present position value for dxl1
         if dxl_getdata_result == True:
-            dxl1_present_position = groupBulkRead.getData(DXL1_ID, ADDR_PRO_PRESENT_POSITION, LEN_PRO_PRESENT_POSITION)
+            self.dxl1_present_position = groupBulkRead.getData(DXL1_ID, ADDR_PRO_PRESENT_POSITION, LEN_PRO_PRESENT_POSITION)
 
         # Check if groupbulkread data of Dynamixel#2 is available
         dxl_getdata_result = groupBulkRead.isAvailable(DXL2_ID, ADDR_PRO_PRESENT_POSITION, LEN_PRO_PRESENT_POSITION)
@@ -233,17 +245,17 @@ class motor_controller:
 
         # Get present position value for dxl2
         if dxl_getdata_result == True:
-            dxl2_present_position = groupBulkRead.getData(DXL2_ID, ADDR_PRO_PRESENT_POSITION, LEN_PRO_PRESENT_POSITION)
+            self.dxl2_present_position = groupBulkRead.getData(DXL2_ID, ADDR_PRO_PRESENT_POSITION, LEN_PRO_PRESENT_POSITION)
         #print("[ID:%03d] Present Position : %d \t [ID:%03d] Present Position: %d" % (DXL1_ID, dxl1_present_position, DXL2_ID, dxl2_present_position))
         #print(type(dxl1_present_position))
-        if(dxl1_present_position<820):
-            self.pos_pan = dxl1_present_position
+        if(self.dxl1_present_position<820):
+            self.pos_pan = self.dxl1_present_position
         else:
-            print(dxl1_present_position)
-        if(dxl2_present_position<820):
-            self.pos_tilt = dxl2_present_position
+            print(self.dxl1_present_position)
+        if(self.dxl2_present_position<820):
+            self.pos_tilt = self.dxl2_present_position
         else:
-            print(dxl2_present_position)
+            print(self.dxl2_present_position)
         #print(self.pos_pan)
         #print(self.pos_tilt)
         #print("[ID:%03d] Present Position : %d \t [ID:%03d] Present Position: %d" % (DXL1_ID, self.pos_pan, DXL2_ID, self.pos_tilt))
