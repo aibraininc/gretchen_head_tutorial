@@ -16,7 +16,7 @@ class Robot:
         self.cmdPub = rospy.Publisher("/gretchen/joint/cmd", Float32MultiArray, queue_size = 10)
         self.lookatpointPub = rospy.Publisher("/look_at_point", Float32MultiArray, queue_size = 10)
 
-        rospy.Subscriber("/gretchen/joint/poses", Float32MultiArray, self.jointCallback, queue_size = 20)
+        rospy.Subscriber("/gretchen/joint/poses", Float32MultiArray, self.jointCallback, queue_size = 10)
         rospy.Subscriber("/head_controller/absolute_point_head_action/result", PointHeadActionResult, self.actionResultCallback, queue_size = 10)
         self.cur_pan_angle = 0
         self.cur_tilt_angle = 0
@@ -83,45 +83,45 @@ class Robot:
     def center(self):
         self.cmd_pan = 0
         self.cmd_tilt = 0
-        self.move(self.cmd_pan, self.cmd_tilt)
+        cmd = Float32MultiArray()
+        cmd.data = [self.cmd_pan, self.cmd_tilt]
+        while(self.cmdPub.get_num_connections() < 1):
+            rospy.sleep(0.2)
+        self.cmdPub.publish(cmd)
 
-
-    def move(self, pan_rad, tilt_rad, resend=False):
+    def move(self, pan_rad, tilt_rad):
         self.cmdPub = rospy.Publisher("/gretchen/joint/cmd", Float32MultiArray, queue_size = 0)
         self.cmdPub = rospy.Publisher("/gretchen/joint/cmd", Float32MultiArray, queue_size = 5)
 
-        print("Goal Pan: {}, Goal Tilt: {}".format(self.cmd_pan, self.cmd_tilt))
         head_client = actionlib.SimpleActionClient("/head_controller/absolute_point_head_action",PointHeadAction)
         head_client.wait_for_server()
         head_client.cancel_all_goals()
-        if resend == True:
-            rospy.sleep(0.4)
-            #print "Starting Move Method"
-            while True:
-                try:
-                    image_msg = rospy.wait_for_message("/gretchen/joint/cmd", Float32MultiArray, timeout=0.1)
-                    if(image_msg == None):
-                        break
-                    rospy.sleep(0.2)
-
-                except:
-                    pass
-                    break
-
+        rospy.sleep(0.4)
+        #print "Starting Move Method"
+        while True:
             try:
                 image_msg = rospy.wait_for_message("/gretchen/joint/cmd", Float32MultiArray, timeout=0.1)
                 if(image_msg == None):
-                    rospy.sleep(0.01)
-                else:
-                    rospy.sleep(0.01)
-                    #print type(self.image)
-                    #print self.image.shape
-                while(image_msg != None):
-                    image_msg = rospy.wait_for_message("/gretchen/joint/cmd", Float32MultiArray, timeout=0.1)
-                    print("waiting")
-                    rospy.sleep(0.2)
+                    break
+                rospy.sleep(0.2)
+
             except:
                 pass
+                break
+
+        try:
+            image_msg = rospy.wait_for_message("/gretchen/joint/cmd", Float32MultiArray, timeout=0.1)
+            if(image_msg == None):
+                rospy.sleep(0.01)
+            else:
+                rospy.sleep(0.01)
+                #print type(self.image)
+                #print self.image.shape
+            while(image_msg != None):
+                image_msg = rospy.wait_for_message("/gretchen/joint/cmd", Float32MultiArray, timeout=0.1)
+                rospy.sleep(0.2)
+        except:
+            pass
         cmd = Float32MultiArray()
         self.cmd_pan = pan_rad
         self.cmd_tilt = tilt_rad
@@ -130,56 +130,47 @@ class Robot:
             rospy.sleep(0.2)
         self.cmdPub.publish(cmd)
 
-        if(resend == True):
-            #Check if moved
-            distance = abs(self.cmd_pan - self.cur_pan_angle) + abs(self.cmd_tilt - self.cur_tilt_angle)
-            counter = 0
-            while(distance > 0.05):
-                rospy.sleep(0.3)
-                distance = abs(self.cmd_pan - self.cur_pan_angle) + abs(self.cmd_tilt - self.cur_tilt_angle)
-                #print(distance)
-                self.cmdPub.publish(cmd)
-                print("Resending command...")
-                if counter > 50:
-                    break
-                counter = counter + 1
-        print("Current Pan: {}, Current Tilt: {}".format(self.cur_pan_angle, self.cur_tilt_angle))
 
 
-    def down(self, delta=0.1, resend=False):
+    def down(self, delta=0.1):
         self.cmd_tilt -= delta
         if self.cmd_tilt < -1.0:
             self.cmd_tilt = -1.0
         cmd = Float32MultiArray()
         cmd.data = [self.cmd_pan, self.cmd_tilt]
-        self.move(self.cmd_pan, self.cmd_tilt, resend)
+        while(self.cmdPub.get_num_connections() < 1):
+            rospy.sleep(0.2)
+        self.cmdPub.publish(cmd)
 
-
-    def up(self, delta=0.1, resend=False):
+    def up(self, delta=0.1):
         self.cmd_tilt += delta
         if self.cmd_tilt > 1.0:
             self.cmd_tilt = 1.0
         cmd = Float32MultiArray()
         cmd.data = [self.cmd_pan, self.cmd_tilt]
-        self.move(self.cmd_pan, self.cmd_tilt, resend)
+        while(self.cmdPub.get_num_connections() < 1):
+            rospy.sleep(0.2)
+        self.cmdPub.publish(cmd)
 
-
-    def left(self, delta=0.1, resend=False):
+    def left(self, delta=0.1):
         self.cmd_pan += delta
         if self.cmd_pan > 1.0:
             self.cmd_pan = 1.0
         cmd = Float32MultiArray()
         cmd.data = [self.cmd_pan, self.cmd_tilt]
-        self.move(self.cmd_pan, self.cmd_tilt, resend)
+        while(self.cmdPub.get_num_connections() < 1):
+            rospy.sleep(0.2)
+        self.cmdPub.publish(cmd)
 
-
-    def right(self, delta=0.1, resend=False):
+    def right(self, delta=0.1):
         self.cmd_pan -= delta
         if self.cmd_pan < -1.0:
             self.cmd_pan = -1.0
         cmd = Float32MultiArray()
         cmd.data = [self.cmd_pan, self.cmd_tilt]
-        self.move(self.cmd_pan, self.cmd_tilt, resend)
+        while(self.cmdPub.get_num_connections() < 1):
+            rospy.sleep(0.2)
+        self.cmdPub.publish(cmd)
 
     def publishCommand(self, x,y):
         cmd = Float32MultiArray()
@@ -192,7 +183,6 @@ class Robot:
     def jointCallback(self, joint_angles):
         self.cur_pan_angle = joint_angles.data[0]
         self.cur_tilt_angle = joint_angles.data[1]
-        #print("Current Pan: {}, Current Tilt: {}".format(self.cur_pan_angle, self.cur_tilt_angle))
 
     def getPanAngle(self):
         return self.cur_pan_angle
